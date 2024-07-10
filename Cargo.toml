@@ -1,0 +1,8 @@
+[package]
+name = "noti"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+notify-rust = '4.11.0'
+percent-encoding = "2.3.1"
