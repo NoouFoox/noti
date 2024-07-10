@@ -53,15 +53,15 @@ fn handle_client(mut stream: TcpStream) {
             }
         }
     }
-    fn send_notification(title: &str, txt: &str) -> Result<(), Box<dyn std::error::Error>> {
-        Notification::new()
-            .summary(title)
-            .body(txt)
-            .timeout(Duration::from_secs(10))
-            .show()
-            .expect("显示通知失败");
-        Ok(())
-    }
+}
+fn send_notification(title: &str, txt: &str) -> Result<(), Box<dyn std::error::Error>> {
+    Notification::new()
+        .summary(title)
+        .body(txt)
+        .timeout(Duration::from_secs(10))
+        .show()
+        .expect("显示通知失败");
+    Ok(())
 }
 fn de_code(s: &str) -> Result<String, Box<dyn std::error::Error>> {
     Ok(percent_decode(s.as_bytes()).decode_utf8()?.to_string())
