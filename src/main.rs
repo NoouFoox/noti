@@ -36,11 +36,15 @@ fn handle_client(mut stream: TcpStream) {
                 let mut title = "通知⚠️".to_string();
                 let mut msg = "通知".to_string();
                 for (key, value) in params {
-                    let decode_value = de_code(value);
-                    match key {
-                        "title" => title = decode_value,
-                        "msg" => msg = decode_value,
-                        _ => {}
+                    match de_code(value) {
+                        Ok(decode_value) => match key {
+                            "title" => title = decode_value,
+                            "msg" => msg = decode_value,
+                            _ => {}
+                        },
+                        Err(_) => {
+                            continue;
+                        }
                     }
                     send_notification(&title, &msg).unwrap();
                 }
@@ -58,11 +62,7 @@ fn handle_client(mut stream: TcpStream) {
             .expect("显示通知失败");
         Ok(())
     }
-
-    fn de_code(s: &str) -> String {
-        percent_decode(s.as_bytes())
-            .decode_utf8()
-            .unwrap()
-            .to_string()
-    }
+}
+fn de_code(s: &str) -> Result<String, Box<dyn std::error::Error>> {
+    Ok(percent_decode(s.as_bytes()).decode_utf8()?.to_string())
 }
